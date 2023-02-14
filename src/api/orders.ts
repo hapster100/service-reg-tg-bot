@@ -34,7 +34,7 @@ export async function getOrders(year: number, month: number, day?: number) {
 }
 
 export async function myOrders() {
-  const userId = 'test_id'
+  const userId = Telegram.WebApp.initDataUnsafe.user?.id || 'test_id'
   const res = await baseApiFetch('/orders/user/' + userId)
   const json = await res.json()
   const orders: Order[] = json?.orders.map(toOrder) || []
