@@ -1,0 +1,101 @@
+<script lang="ts">
+  import { writable } from 'svelte/store';
+  import { getSlots } from '../../api/orders';
+  import type { Service } from '../../models/Service';
+  import type { Time } from '../../models/Time';
+  import { 
+    year, month, serviceIds,
+    current, OrderStep, day, daySlots 
+  } from '../../stores/newOrder'
+  import Calendar from '../Calendar.svelte';
+  export let services: Service[]
+
+  const serviceDuration = services.reduce((acc, s) => (acc[s.id] = s.durationMinutes, acc), {})
+  const slots = writable({} as {[key: number]: Time[]})
+  
+  type CellData = { class: string, active: boolean }
+  
+  const days = writable({} as {[key: number]: CellData})
+  $: {
+
+    const numDays = new Date(Date.UTC($year, $month+1, 0)).getDate()
+    let minDay = 0
+
+    if ($year === new Date().getFullYear() && $month === new Date().getMonth()) {
+      minDay = new Date().getDate()
+    }
+
+    const newDays = {} as {[key: number]: CellData}
+    for(let d = 1; d <= numDays; d++) {
+      const active = $slots[d]?.length > 0
+      newDays[d] = {
+        active,
+        class: active ? 'active' : 'not-active',
+      }
+    }
+    $days = newDays
+  }
+
+  function nextMonth() {
+    if ($month === 11) {
+      month.set(0)
+      year.set($year + 1)
+    } else {
+      month.set($month + 1)
+    }
+    updateSlots()
+  }
+
+  function prevMonth() {
+    if ($month === 0) {
+      month.set(11)
+      year.set($year - 1)
+    } else {
+      month.set($month - 1)
+    }
+    updateSlots()
+  }
+  
+  async function updateSlots() {
+    $slots = {}
+    const duration = $serviceIds.reduce((acc, id) => acc + serviceDuration[id], 0)
+    const newSlots = await getSlots($year, $month, duration)
+    $slots = newSlots
+  }
+
+  function selectDay(day: number) {
+    $day = day
+    $daySlots = $slots[day]
+    $current = OrderStep.Time
+  }
+
+  updateSlots()
+
+</script>
+
+<h3 class="page-title">Выбор даты</h3>
+<Calendar 
+  year={$year}
+  month={$month}
+  days={$days}
+  on:next={nextMonth}
+  on:prev={prevMonth}
+  on:click={({ detail }) => selectDay(detail.day)}
+>
+  <style>
+    .active {
+      color: black;
+      background-color: white;
+      padding: 0;
+      margin: 0;
+      font-size: 100%;
+      text-decoration: underline;
+    }
+
+    .not-active {
+      color: grey;
+      cursor: not-allowed;
+    }
+  </style>
+</Calendar>
+<button class="fullw" on:click={() => $current = OrderStep.Services}>Назад</button>
