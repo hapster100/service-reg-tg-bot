@@ -8,6 +8,7 @@
   import IntervalInput from "../components/IntervalInput.svelte";
   import OrderInfo from "../components/OrderInfo.svelte";
   import OrdersShedulle from "../components/shedulle/OrdersShedulle.svelte";
+  import ShedulleOrders from "../components/shedulle/ShedulleOrders.svelte";
   import type { Order } from "../models/Order";
   import type { Service } from "../models/Service";
   import { Interval, Shedulle } from "../models/Shedulle";
@@ -148,22 +149,15 @@
 
 </script>
 {#if $day > 0}
-<h3 class="page-title">{dayString}</h3>
-<ul class="fullw">
-  {#each $shedulle[$day]?.intervals as {from, to}}
-  <li>
-    {Time.fromMinutes(from).toString().padStart(5, '')} - {Time.fromMinutes(to).toString().padStart(5)}
-  </li>  
-  {/each}
-</ul>
-{#each $orders.filter(({ date }) => date.getDate() === $day) as order}
-  <div class="order fullw">
-    <OrderInfo order={order} services={$services} />
-    <div class="user">
-      {order.userId}
-    </div>
-  </div>
-{/each}
+  <h3 class="page-title">{dayString}</h3>
+  <ul class="fullw">
+    {#each $shedulle[$day]?.intervals as {from, to}}
+    <li>
+      {Time.fromMinutes(from).toString().padStart(5, '')} - {Time.fromMinutes(to).toString().padStart(5)}
+    </li>  
+    {/each}
+  </ul>
+  <ShedulleOrders orders={$orders.filter(({ date }) => date.getDate() === $day)} services={$services}/>
 <button class="back-btn fullw" on:click={() => $day = 0}>К датам</button>
 {:else}
   <h3 class="page-title">Расписание</h3>
@@ -290,21 +284,11 @@
     border-bottom-right-radius: 0;
     border-top-right-radius: 0;
   }
-
-  .user {
-    margin: 8px;
-  }
-
+  
   .back-btn {
     margin-bottom: 12px;
   }
 
-  .order {
-    border-radius: 8px;
-    border: 1px solid black;
-    margin-bottom: 12px;
-    overflow: hidden;
-  }
 
   h3 {
     margin: 8px;

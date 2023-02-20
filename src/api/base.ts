@@ -1,15 +1,19 @@
 export type NoId<T> = Omit<T, 'id'>
 
-const baseUrl = 'https://localhost:8080/api'
+const baseUrl = 'http://178.185.109.211:2025/api'
 
-export async function baseApiFetch(path, method = 'GET', body = {}, headers = {}) {
+export async function baseApiFetch(path: string, method = 'GET', body = {}, headers = {}) {
   const options : RequestInit = { method }
+
+  options.headers = {
+    'Content-Type': 'application/json',
+    'X-Validation-Data': Telegram.WebApp.initData,
+    ...headers,
+  }
+  
   if (method !== 'GET') {
     options.body = JSON.stringify(body) 
-    options.headers = {
-      'Content-Type': 'application/json',
-      ...headers,
-    }
   }
+  
   return fetch(baseUrl + path, options)
 }

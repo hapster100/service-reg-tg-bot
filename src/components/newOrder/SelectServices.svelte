@@ -61,7 +61,7 @@
     Итого: {totalCost}руб. <Time duration={totalDuration}/>
   </div>
   <div class="new-order-ctrl">
-    <button on:click={() => $listOpen = true}>Добавить еще</button>
+    <button class="outline-btn" on:click={() => $listOpen = true}>Добавить еще</button>
     <button on:click={() => $current = OrderStep.Date}>Далее</button>
   </div>
 {/if}

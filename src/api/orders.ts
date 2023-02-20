@@ -1,5 +1,6 @@
 import { Order } from "../models/Order"
 import { Time } from "../models/Time"
+import { userId } from "../stores/user"
 import { baseApiFetch } from "./base"
 
 function toOrder(raw: any) {
@@ -34,7 +35,6 @@ export async function getOrders(year: number, month: number, day?: number) {
 }
 
 export async function myOrders() {
-  const userId = Telegram.WebApp.initDataUnsafe.user?.id || 'test_id'
   const res = await baseApiFetch('/orders/user/' + userId)
   const json = await res.json()
   const orders: Order[] = json?.orders.map(toOrder) || []

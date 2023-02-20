@@ -10,6 +10,7 @@
   import SelectTime from "../components/newOrder/SelectTime.svelte";
   import Loader from "../components/Loader.svelte";
   import BackToMenu from "../components/BackToMenu.svelte";
+  import SuccessOrder from "../components/newOrder/SuccessOrder.svelte";
   
   const serviceById = writable({} as {[key: string]: ServiceType})
   const categoryById = writable({} as {[key: string]: Category})
@@ -37,8 +38,10 @@
       <SelectServices services={services} categories={categories} />
     {:else if $current === OrderStep.Date}
       <SelectDate services={services} />
-    {:else}
+    {:else if $current === OrderStep.Time}
       <SelectTime />
+    {:else if $current === OrderStep.Success}
+      <SuccessOrder />
     {/if}
   {/await}
 </div>

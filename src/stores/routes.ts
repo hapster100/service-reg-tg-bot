@@ -8,6 +8,7 @@ export const Route = {
   NewService: '/newservice',
   NewCategory: '/newcategory',
   Shedulle: '/shedulle',
+  Profile: '/profile'
 }
 
 
