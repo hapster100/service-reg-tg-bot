@@ -14,7 +14,8 @@
   import { OrderStore, OrderStep } from '../stores/newOrder'
   import { onDestroy, onMount } from "svelte";
   
-  const store = new OrderStore()
+  const { order } = history.state
+  const store = new OrderStore(order)
 
   onMount(() => {
     store.init()

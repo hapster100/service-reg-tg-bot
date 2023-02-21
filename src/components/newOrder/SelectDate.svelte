@@ -11,7 +11,7 @@
 
   const {
     year, month, serviceIds, slotsCache,
-    currentStep, day, daySlots
+    currentStep, day, daySlots, orderId
   } = store
 
   const serviceDuration = services.reduce((acc, s) => (acc[s.id] = s.durationMinutes, acc), {})
@@ -67,7 +67,7 @@
     }
     $slots = {}
     const duration = $serviceIds.reduce((acc, id) => acc + serviceDuration[id], 0)
-    const newSlots = await getSlots($year, $month, duration)
+    const newSlots = await getSlots($year, $month, duration, orderId)
     $slots = newSlots
     slotsCache.update(cache => {
       return {

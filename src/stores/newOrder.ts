@@ -1,5 +1,6 @@
 import { writable, type Unsubscriber, type Writable } from "svelte/store";
-import { createOrder, type OrderForm } from "../api/orders";
+import { createOrder, updateOrder, type OrderForm } from "../api/orders";
+import { Order } from "../models/Order";
 import { Time } from "../models/Time";
 import { userId } from "./user";
 
@@ -28,28 +29,42 @@ export class OrderStore {
   readonly currentStep: Writable<OrderStep>
   readonly daySlots: Writable<Time[]>
   readonly slotsCache: Writable<SlotsCache>
+  readonly orderId: string
   
   private form: OrderForm
+  private initial: OrderForm
   private unsubs: Unsubscriber[]
+  private order?: Order
 
-  constructor() {
-    this.serviceIds = writable([])
-    this.year = writable(new Date().getFullYear())
-    this.month = writable(new Date().getMonth())
-    this.day = writable(1)
-    this.time = writable(new Time(0, 0))
+  constructor(order?: Order) {
+    this.initial = this.makeInitial(order)
+    this.form = this.makeInitial(order)
+    this.order = order
+    this.unsubs = []
+
+    this.orderId = order?.id ?? ''
+
+    this.serviceIds = writable(this.initial.serviceIds)
+    this.year = writable(this.initial.year)
+    this.month = writable(this.initial.month)
+    this.day = writable(this.initial.day)
+    this.time = writable(this.initial.time)
+
     this.currentStep = writable(OrderStep.Services)
     this.daySlots = writable([])
     this.slotsCache = writable({})
-    this.form = {
-      serviceIds: [] as string[],
-      year: 0,
-      month: 0,
-      day: 0,
-      time: new Time(0, 0),
-      userId
-    }
-    this.unsubs = []
+  }
+
+  private makeInitial(order?: Order) : OrderForm {
+    const date = order?.date ?? new Date()
+    return {
+      serviceIds: order?.serviceIds ?? [],
+      year: date.getFullYear(),
+      month: date.getMonth(),
+      day: date.getDate(),
+      time: order?.time ?? Time.fromMinutes(0),
+      userId: order?.userId ?? userId,
+    } 
   }
   
   init() {
@@ -63,19 +78,16 @@ export class OrderStore {
     ])
   }
 
-  reset() {
-    this.serviceIds.set([])
-    this.year.set(new Date().getFullYear())
-    this.month.set(new Date().getMonth())
-    this.time.set(new Time(0, 0))
-    this.day.set(1)
-    this.daySlots.set([])
-    this.currentStep.set(OrderStep.Services)
-    this.slotsCache.set({})
-  }
-
   async makeOrder() {
-    return await createOrder(this.form) 
+    if (!this.order) return await createOrder(this.form) 
+    const { userId, time, year, month, day, serviceIds } = this.form
+    const date = new Date(Date.UTC(year, month, day))
+    const order = new Order({
+      id: this.order.id,
+      userId, time, date,
+      serviceIds,
+    })
+    return await updateOrder(order)
   }
 
   destroy() {

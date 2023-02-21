@@ -3,6 +3,7 @@
   import type { Order } from "../../models/Order";
   import type { Service } from "../../models/Service";
   import type { User } from "../../models/User";
+  import { goToWithState } from "../../stores/routes";
   import { userId } from "../../stores/user";
   import Loader from "../Loader.svelte";
   import OrderInfo from "../OrderInfo.svelte";
@@ -38,11 +39,31 @@
           {/if}
         </span>
       </div>
+      <div class="fullw controls">
+        <!-- <button class="outline-btn controls-btn" on:click={() => {}}>Отменить</button> -->
+        <button class="outline-btn controls-btn" on:click={goToWithState.NewOrder({order})}>Изменить</button>
+      </div>
     </div>
   {/each}
 {/await}
 
 <style>
+  .controls {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .controls-btn {
+    flex: 1;
+    border-radius: 0;
+    border-bottom: 0;
+    border-left: 0;
+  }
+
+  .controls-btn:last-child {
+    border-right: 0;
+  }
+
   .user {
     padding: 8px 0;
     margin: 8px;

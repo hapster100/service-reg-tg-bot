@@ -2,10 +2,15 @@
   import { getAllServices } from "../../api/services";
   import type { Service } from "../../models/Service";
   import type { OrderStore } from "../../stores/newOrder";
+  import { goTo } from "../../stores/routes";
   import Loader from "../Loader.svelte";
 
   export let store: OrderStore
-  const { day, month, serviceIds, time, year }  = store 
+  const { day, month, serviceIds, time, year, orderId }  = store 
+
+  if (orderId) {
+    goTo.Shedulle()
+  }
 
   const servicesByIdPromise = getAllServices().then(
     services => services.reduce((acc, s) => (acc[s.id] = s, acc), {} as {[key: string]: Service})
@@ -19,7 +24,7 @@
 </script>
 {#await servicesByIdPromise}
   <Loader />
-{:then serviceById} 
+{:then serviceById}
   <div class="success">
     <h3 class="page-title">
       Запись успешно сделана!

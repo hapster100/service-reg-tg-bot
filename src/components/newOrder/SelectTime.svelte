@@ -11,7 +11,8 @@
 
   const {
     currentStep, daySlots, slotsCache,
-    makeOrder, time, day, year, month, serviceIds
+    time, day, year, month,
+    serviceIds, orderId,
   } = store
 
   let process = false
@@ -62,7 +63,7 @@
       const services = await getAllServices()
       const serviceById = services.reduce((acc, s) => (acc[s.id] = s, acc), {} as {[key: string]: Service})
       const duration = $serviceIds.map(id => serviceById[id].durationMinutes).reduce((a, b) => a + b, 0)
-      const slots = await getSlots(year, month, duration)
+      const slots = await getSlots(year, month, duration, orderId)
       slotsCache.update(cache => ({
         ...cache,
         [year]: {
