@@ -1,17 +1,31 @@
 <script lang="ts">
-  import { writable, type Writable } from "svelte/store"
+  import { writable } from "svelte/store"
   import { getAllCategories } from "../api/categories"
   import { getAllServices } from "../api/services"
   import type { Service as ServiceType } from "../models/Service"
   import type { Category } from '../models/Category'
   import SelectServices from "../components/newOrder/SelectServices.svelte";
-  import { current, OrderStep } from "../stores/newOrder";
   import SelectDate from "../components/newOrder/SelectDate.svelte";
   import SelectTime from "../components/newOrder/SelectTime.svelte";
   import Loader from "../components/Loader.svelte";
   import BackToMenu from "../components/BackToMenu.svelte";
   import SuccessOrder from "../components/newOrder/SuccessOrder.svelte";
   
+  import { OrderStore, OrderStep } from '../stores/newOrder'
+  import { onDestroy, onMount } from "svelte";
+  
+  const store = new OrderStore()
+
+  onMount(() => {
+    store.init()
+  })
+
+  onDestroy(() => {
+    store.destroy()
+  })
+
+  const { currentStep } = store
+
   const serviceById = writable({} as {[key: string]: ServiceType})
   const categoryById = writable({} as {[key: string]: Category})
 
@@ -34,14 +48,14 @@
   {#await both} 
     <Loader />
   {:then [services, categories]}
-    {#if $current === OrderStep.Services}
-      <SelectServices services={services} categories={categories} />
-    {:else if $current === OrderStep.Date}
-      <SelectDate services={services} />
-    {:else if $current === OrderStep.Time}
-      <SelectTime />
-    {:else if $current === OrderStep.Success}
-      <SuccessOrder />
+    {#if $currentStep === OrderStep.Services}
+      <SelectServices store={store} services={services} categories={categories} />
+    {:else if $currentStep === OrderStep.Date}
+      <SelectDate store={store} services={services} />
+    {:else if $currentStep === OrderStep.Time}
+      <SelectTime store={store} />
+    {:else if $currentStep === OrderStep.Success}
+      <SuccessOrder store={store} />
     {/if}
   {/await}
 </div>

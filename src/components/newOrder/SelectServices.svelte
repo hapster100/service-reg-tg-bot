@@ -2,13 +2,16 @@
   import { writable } from "svelte/store"
   import type { Category } from "../../models/Category"
   import type { Service } from "../../models/Service"
-  import { current, OrderStep, serviceIds } from "../../stores/newOrder"
+  import { OrderStep, OrderStore } from "../../stores/newOrder"
   import ServiceInfo from "../ServiceInfo.svelte"
   import ServicesList from '../SirvicesList.svelte'
   import Time from "../Time.svelte";
 
   export let services : Service[]
   export let categories : Category[]
+  export let store: OrderStore
+
+  const { serviceIds, currentStep } = store
 
   let serviceById = {} as {[key: string]: Service}
   let listOpen = writable($serviceIds.length === 0)
@@ -65,7 +68,7 @@
     <button
       class:disabled-btn={$serviceIds.length === 0}
       disabled={$serviceIds.length === 0} 
-      on:click={() => $current = OrderStep.Date}>Далее</button>
+      on:click={() => $currentStep = OrderStep.Date}>Далее</button>
   </div>
 {/if}
 

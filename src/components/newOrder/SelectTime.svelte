@@ -4,11 +4,15 @@
   import { getAllServices } from '../../api/services';
   import type { Service } from '../../models/Service';
   import type { Time } from '../../models/Time';
-  import { 
-    current, OrderStep, daySlots, slotsCache,
-    makeOrder, time, day, year, month, serviceIds
-  } from '../../stores/newOrder'
+  import { OrderStep, OrderStore } from '../../stores/newOrder'
   import Loader from '../Loader.svelte';
+
+  export let store: OrderStore
+
+  const {
+    currentStep, daySlots, slotsCache,
+    makeOrder, time, day, year, month, serviceIds
+  } = store
 
   let process = false
 
@@ -16,10 +20,10 @@
     $time = time
     process = true
     try {
-      await makeOrder()
+      await store.makeOrder()
     } finally {
       process = false
-      $current = OrderStep.Success
+      $currentStep = OrderStep.Success
     }
   }
 
@@ -47,7 +51,6 @@
         current: date.getDate() === $day,
         disabled: !slots || slots.length === 0,
         click: () => {
-          console.log(date)
           $day = date.getDate()
           $month = date.getMonth()
           $year = date.getFullYear()
@@ -110,7 +113,7 @@
     {/each}
   </div>
 {/if}
-<button class="fullw" on:click={() => $current = OrderStep.Date}>Назад</button>
+<button class="fullw" on:click={() => $currentStep = OrderStep.Date}>Назад</button>
 
 <style>
 

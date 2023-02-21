@@ -1,9 +1,11 @@
 <script lang="ts">
   import { getAllServices } from "../../api/services";
   import type { Service } from "../../models/Service";
-  import { day, month, serviceIds, time, year } from "../../stores/newOrder";
+  import type { OrderStore } from "../../stores/newOrder";
   import Loader from "../Loader.svelte";
-  import ServiceInfo from "../ServiceInfo.svelte";
+
+  export let store: OrderStore
+  const { day, month, serviceIds, time, year }  = store 
 
   const servicesByIdPromise = getAllServices().then(
     services => services.reduce((acc, s) => (acc[s.id] = s, acc), {} as {[key: string]: Service})

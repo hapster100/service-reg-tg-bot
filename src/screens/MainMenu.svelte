@@ -1,11 +1,10 @@
 <script lang="ts">
-  import { reset } from "../stores/newOrder";
-  import { goTo } from "../stores/routes";
+  import { goTo, goToWithState } from "../stores/routes";
   import { isAdmin } from "../stores/user";
 </script>
 
 <div class="main-menu fullw">
-  <button on:click={() => {reset(); goTo.NewOrder()}}>Записаться</button>
+  <button on:click={goTo.NewOrder}>Записаться</button>
   <button on:click={goTo.MyOrders}>Мои записи</button>
   <button on:click={goTo.Profile}>Профиль</button>
   {#if $isAdmin}

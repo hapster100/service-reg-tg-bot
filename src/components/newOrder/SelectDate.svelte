@@ -3,12 +3,16 @@
   import { getSlots } from '../../api/orders';
   import type { Service } from '../../models/Service';
   import type { Time } from '../../models/Time';
-  import { 
-    year, month, serviceIds, slotsCache,
-    current, OrderStep, day, daySlots, 
-  } from '../../stores/newOrder'
+  import { OrderStep, OrderStore } from '../../stores/newOrder'
   import Calendar from '../Calendar.svelte';
+  
   export let services: Service[]
+  export let store: OrderStore
+
+  const {
+    year, month, serviceIds, slotsCache,
+    currentStep, day, daySlots
+  } = store
 
   const serviceDuration = services.reduce((acc, s) => (acc[s.id] = s.durationMinutes, acc), {})
   const slots = writable({} as {[key: number]: Time[]})
@@ -79,7 +83,7 @@
   function selectDay(day: number) {
     $day = day
     $daySlots = $slots[day]
-    $current = OrderStep.Time
+    $currentStep = OrderStep.Time
   }
 
   updateSlots()
@@ -111,4 +115,4 @@
     }
   </style>
 </Calendar>
-<button class="fullw" on:click={() => $current = OrderStep.Services}>Назад</button>
+<button class="fullw" on:click={() => $currentStep = OrderStep.Services}>Назад</button>
