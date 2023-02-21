@@ -46,7 +46,7 @@ export async function cancelOrder(orderId: string) {
   return await baseApiFetch('/orders/' + orderId, 'DELETE');
 }
 
-export async function getSlots(year: number, month: number, duration: number) {
+export async function getSlots(year: number, month: number, duration: number) : Promise<{[key: string]: Time[]}>{
   const slots = await baseApiFetch('/orders/slots', 'POST', {
     year, month, duration
   }).then(res => res.json())

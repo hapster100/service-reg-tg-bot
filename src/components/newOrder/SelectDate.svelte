@@ -4,8 +4,8 @@
   import type { Service } from '../../models/Service';
   import type { Time } from '../../models/Time';
   import { 
-    year, month, serviceIds,
-    current, OrderStep, day, daySlots 
+    year, month, serviceIds, slotsCache,
+    current, OrderStep, day, daySlots, 
   } from '../../stores/newOrder'
   import Calendar from '../Calendar.svelte';
   export let services: Service[]
@@ -17,7 +17,6 @@
   
   const days = writable({} as {[key: number]: CellData})
   $: {
-
     const numDays = new Date(Date.UTC($year, $month+1, 0)).getDate()
     let minDay = 0
 
@@ -57,10 +56,24 @@
   }
   
   async function updateSlots() {
+    const cache = $slotsCache[$year]?.[$month]
+    if (cache) {
+      $slots = cache
+      return;
+    }
     $slots = {}
     const duration = $serviceIds.reduce((acc, id) => acc + serviceDuration[id], 0)
     const newSlots = await getSlots($year, $month, duration)
     $slots = newSlots
+    slotsCache.update(cache => {
+      return {
+        ...cache,
+        [$year]: {
+          ...(cache[$year] || {}),
+          [$month]: $slots
+        }
+      }
+    })
   }
 
   function selectDay(day: number) {

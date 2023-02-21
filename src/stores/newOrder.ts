@@ -18,6 +18,12 @@ export const time: Writable<Time> = writable(new Time(0, 0))
 
 export const current = writable(OrderStep.Services)
 export const daySlots = writable([] as Time[])
+type TimeMap = {[key:number]: Time[]}
+export const slotsCache = writable({} as {
+  [key: number]: {
+    [key: number]: TimeMap | null | undefined
+  } | null | undefined
+})
 
 export function reset() {
   serviceIds.set([])
@@ -27,6 +33,7 @@ export function reset() {
   day.set(1)
   daySlots.set([])
   current.set(OrderStep.Services)
+  slotsCache.set({})
 }
 
 
@@ -39,6 +46,7 @@ const orderForm = {
   userId 
 }
 
+serviceIds.subscribe(() => slotsCache.update(() => ({})))
 serviceIds.subscribe(v => orderForm.serviceIds = [...v])
 year.subscribe(v => orderForm.year = v)
 month.subscribe(v => orderForm.month = v)

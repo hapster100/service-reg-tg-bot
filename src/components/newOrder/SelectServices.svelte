@@ -62,7 +62,10 @@
   </div>
   <div class="new-order-ctrl">
     <button class="outline-btn" on:click={() => $listOpen = true}>Добавить еще</button>
-    <button on:click={() => $current = OrderStep.Date}>Далее</button>
+    <button
+      class:disabled-btn={$serviceIds.length === 0}
+      disabled={$serviceIds.length === 0} 
+      on:click={() => $current = OrderStep.Date}>Далее</button>
   </div>
 {/if}
 
