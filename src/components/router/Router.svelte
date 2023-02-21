@@ -24,7 +24,7 @@
 
   $: {
     for(const route of $routes) {
-      if (route.path === $currentPath) {
+      if (route.path === $currentPath.path) {
         $activeRoute = route
         break
       }
