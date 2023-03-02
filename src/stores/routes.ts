@@ -12,6 +12,7 @@ export const Route = {
 }
 
 
+export const initParams = new URLSearchParams(location.search)
 export const currentPath = writable({
   path: Route.MainMenu,
   state: {}
