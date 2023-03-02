@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { goTo, goToWithState } from "../stores/routes";
+  import { goTo } from "../stores/routes";
   import { isAdmin } from "../stores/user";
 </script>
 
