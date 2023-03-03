@@ -53,6 +53,8 @@
       {:else}
       <UserForm on:submit={submitHandler}/>
     {/if}
+  {:catch}
+      <div>Ссылка не действительна</div>
   {/await}
 </div>
 
