@@ -198,18 +198,18 @@
         border-radius: 0;
       }
       .selected {
-        background-color: black;
+        background-color: var(--color-text);
       }
 
       
       .unselected {
-        background-color: white;
-        color: black;
+        background-color: var(--color-bg);
+        color: var(--color-text);
       }
 
       .selected.free {
         background-color: grey;
-        color: white;
+        color: var(--color-bg);
       }
 
       .free {
@@ -266,12 +266,12 @@
 
   .mode-ctrl button {
     flex: 1;
-    border: 1px solid black;
+    border: 1px solid var(--color-text);
   }
 
   .mode-ctrl .not-active {
-    background-color: white;
-    color: black;
+    background-color: var(--color-bg);
+    color: var(--color-text);
   }
 
   .mode-ctrl button:last-child {
@@ -310,10 +310,10 @@
     display: block;
     height: 20px;
     width: 20px;
-    border: 1px solid black;
+    border: 1px solid var(--color-text);
     outline: none;
-    background-color: black;
-    accent-color: black;
+    background-color: var(--color-text);
+    accent-color: var(--color-text);
   }
 
 </style>

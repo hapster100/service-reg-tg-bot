@@ -77,18 +77,18 @@ return days
   <style>
     .day {
       background-color: transparent;
-      color: black;
+      color: var(--color-text);
       border-radius: 0;
       width: 100%;
       height: 100%;
     }
     .past {
-      background-color: white;
+      background-color: var(--color-bg);
       color: grey;
       text-decoration: line-through; 
     }
     .free {
-      background-color: white;
+      background-color: var(--color-bg);
       color: grey
     }
     .no {
@@ -132,6 +132,6 @@ return days
     width: 24px;
     height: 24px;
     margin-right: 8px;
-    border: 1px solid black;
+    border: 1px solid var(--color-text);
   }
 </style>

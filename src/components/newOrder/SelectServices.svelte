@@ -78,7 +78,7 @@
     margin: auto;
     width: calc(100% - 8px);
     margin-bottom: 8px;
-    border: 1px solid black;
+    border: 1px solid var(--color-text);
     border-radius: 8px;
     display: flex;
   }

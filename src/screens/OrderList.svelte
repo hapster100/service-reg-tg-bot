@@ -41,11 +41,11 @@
 <style>
   .order {
     overflow: hidden;
-    border: 1px solid black;
+    border: 1px solid var(--color-text);
     border-radius: 8px;
     display: flex;
     flex-direction: column;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid var(--color-text);
     margin-bottom: 20px;
   }
 

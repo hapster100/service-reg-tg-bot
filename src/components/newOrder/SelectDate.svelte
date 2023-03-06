@@ -101,8 +101,8 @@
 >
   <style>
     .active {
-      color: black;
-      background-color: white;
+      color: var(--color-text);
+      background-color: var(--color-bg);
       padding: 0;
       margin: 0;
       font-size: 100%;

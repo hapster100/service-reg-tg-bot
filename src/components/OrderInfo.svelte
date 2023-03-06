@@ -38,8 +38,8 @@
     display: flex;
     justify-content: space-between;
     padding: 12px;
-    border-bottom: 1px solid black;
-    background-color: black;
-    color: white;
+    border-bottom: 1px solid var(--color-text);
+    background-color: var(--color-text);
+    color: var(--color-bg);
   }
 </style>

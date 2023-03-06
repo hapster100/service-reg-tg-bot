@@ -57,9 +57,9 @@
 <style>
   .cat-btn {
     display: flex;
-    background-color: white;
-    color: black;
-    border-bottom: 1px solid black;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    border-bottom: 1px solid var(--color-text);
     border-radius: 0;
     align-items: flex-start;
     justify-content: space-between;
@@ -71,8 +71,8 @@
     display: inline-block;
     width: 10px;
     height: 10px;
-    border-top: 2px solid black;
-    border-right: 2px solid black;
+    border-top: 2px solid var(--color-text);
+    border-right: 2px solid var(--color-text);
     transform: rotate(135deg);
   }
 
@@ -90,7 +90,7 @@
   .service-wrapper {
     border-radius: 8px;
     overflow: hidden;
-    border: 1px solid black;
+    border: 1px solid var(--color-text);
     margin-bottom: 20px;
   }
 

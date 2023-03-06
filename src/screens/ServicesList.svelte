@@ -1,7 +1,7 @@
 <script lang="ts">
 
   import { getAllCategories } from "../api/categories"
-  import { getAllServices  } from "../api/services"
+  import { deleteService, getAllServices  } from "../api/services"
   import type { Service } from "../models/Service"
   import Loader from "../components/Loader.svelte";
   import BackToMenu from "../components/BackToMenu.svelte";
@@ -10,24 +10,36 @@
   import ServiceInfo from "../components/ServiceInfo.svelte";
 
   type ServiceByCategoryId = {[key: string]: Service[]}
-  let both = Promise.all([
-    getAllCategories(), 
-    getAllServices()
-  ]).then(([categories, services]) => {
-    const servicesByCategoryId = {}
-    for(const {id} of categories) {
-      servicesByCategoryId[id] = []
-    }
-    for(const service of services) {
-      if(Array.isArray(servicesByCategoryId[service.categoryId])) {
-        servicesByCategoryId[service.categoryId].push(service)
+  let both = fetchServicesAndCategories()
+
+  function fetchServicesAndCategories() {
+    return Promise.all([
+      getAllCategories(), 
+      getAllServices()
+    ]).then(([categories, services]) => {
+      const servicesByCategoryId = {}
+      for(const {id} of categories) {
+        servicesByCategoryId[id] = []
       }
+      for(const service of services) {
+        if(Array.isArray(servicesByCategoryId[service.categoryId])) {
+          servicesByCategoryId[service.categoryId].push(service)
+        }
+      }
+      return [
+        categories,
+        servicesByCategoryId,
+      ]
+    }) as Promise<[Category[], ServiceByCategoryId]>
+  }
+
+  function handleDeleteService(serviceId: string) {
+    return function() {
+      both = deleteService(serviceId).then(
+        fetchServicesAndCategories
+      )
     }
-    return [
-      categories,
-      servicesByCategoryId,
-    ]
-  }) as Promise<[Category[], ServiceByCategoryId]>
+  }
 </script>
 
 {#await both}
@@ -41,8 +53,9 @@
         {#if servicesByCategoryId[category.id]}
           <ul>
             {#each servicesByCategoryId[category.id] as service}
-              <li>
+              <li class='service-item'>
                 <ServiceInfo service={service} />
+                <button on:click={handleDeleteService(service.id)}>X</button>
               </li>
             {/each}
           </ul>
@@ -70,6 +83,12 @@
 
   .category ul {
     list-style: square;
+  }
+
+  .service-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }
 
   .services-list button {

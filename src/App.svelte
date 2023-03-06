@@ -51,7 +51,7 @@
   .container {
     box-sizing: border-box;
     min-height: 100vh;
-    background-color: white;
+    background-color: var(--color-bg);
     display: flex;
     flex-direction: column;
     align-items: center;

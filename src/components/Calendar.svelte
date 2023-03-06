@@ -92,7 +92,7 @@
 
 <style>
   .calendar {
-    border: 1px solid black;
+    border: 1px solid var(--color-text);
     border-radius: 8px;
     overflow: hidden;
     margin-bottom: 16px;
@@ -100,7 +100,7 @@
   .calendar-head {
     display: flex;
     flex-direction: row;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid var(--color-text);
   }
 
   .calendar-head-cell {
@@ -119,7 +119,7 @@
   .calendar-row {
     display: flex;
     flex-direction: row;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid var(--color-text);
   }
 
   .calendar-row:last-child {
@@ -133,7 +133,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border-right: 1px solid black;
+    border-right: 1px solid var(--color-text);
     box-sizing: border-box;
     max-width: calc(100%/7);
   }

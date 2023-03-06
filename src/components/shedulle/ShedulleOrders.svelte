@@ -81,7 +81,7 @@
 
   .order {
     border-radius: 8px;
-    border: 1px solid black;
+    border: 1px solid var(--color-text);
     margin-bottom: 12px;
     overflow: hidden;
   }

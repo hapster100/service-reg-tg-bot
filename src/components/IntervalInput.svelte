@@ -133,14 +133,14 @@
 		height: 12px;
 		top: 50%;
 		transform: translate(0, -50%);
-		background-color: white;
-    border: 4px solid black;
+		background-color: var(--color-bg);
+    border: 4px solid var(--color-text);
     border-radius: 5px;
     box-sizing: border-box;
   }
 
   .work-time {
-    background-color: black;
+    background-color: var(--color-text);
     top: 0;
     height: 6px;
     position: absolute;
@@ -160,7 +160,7 @@
 		border-radius: 50%;
 		width: 20px;
 		height: 20px;
-		background-color: black;
+		background-color: var(--color-text);
 		transform: translate(-50%, -50%)
   }
 
