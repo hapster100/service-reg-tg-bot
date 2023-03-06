@@ -7,7 +7,9 @@
 
 <div class="service fullw">
   <ServiceInfo service={service} />
-  <img class="service-image fullw" src={service.imageUrl} alt={service.name}>
+  {#if service.imageUrl}
+    <img class="service-image fullw" src={service.imageUrl} alt={service.name}>
+  {/if}
 </div>
 
 <style>
