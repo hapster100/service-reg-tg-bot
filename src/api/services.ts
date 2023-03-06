@@ -14,6 +14,10 @@ export async function getServiceById(id: string): Promise<Service> {
   return new Service(json)
 }
 
+export async function deleteService(id: string) {
+  return await baseApiFetch('/services/' + id, 'DELETE')
+}
+
 export async function addService(service: NoId<Service>) {
   const body = { service }
   return await baseApiFetch('/services', 'POST', body)
