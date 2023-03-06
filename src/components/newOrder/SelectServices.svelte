@@ -49,11 +49,11 @@
   <ServicesList 
     services={services.filter(s => !$serviceIds.includes(s.id))}
     categories={categories}
-    on:select={add} 
+    on:select={add}
   />
   <button class="fullw" on:click={() => $listOpen = false}>К списку</button>
 {:else}
-  <h3 class="page-title">Выбранные услуг</h3> 
+  <h3 class="page-title">Выбранные услуги</h3> 
   {#each $serviceIds as serviceId}
     <div class='service-info-wrapper'>
       <ServiceInfo service={serviceById[serviceId]}/>
