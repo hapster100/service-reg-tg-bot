@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { getAddress } from "../../api/masters";
   import { getAllServices } from "../../api/services";
   import type { Service } from "../../models/Service";
   import type { OrderStore } from "../../stores/newOrder";
@@ -21,17 +22,19 @@
     day: 'numeric',
   })
 
+  const addressPromise = getAddress()
+
 </script>
-{#await servicesByIdPromise}
+{#await Promise.all([servicesByIdPromise, addressPromise])}
   <Loader />
-{:then serviceById}
+{:then [serviceById, address]}
   <div class="success">
     <h3 class="page-title">
-      Запись успешно сделана!
+      Запись успешно создана!
     </h3>
     <div class="info">
       Ждем вас в {$time} {dateStr}<br>
-      Мира 124, 'Singular'<br>
+      {address}<br>
     </div>
     <div class="list">
       <span class="list-title">Список услуг</span><br>
