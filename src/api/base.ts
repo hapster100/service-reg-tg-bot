@@ -2,13 +2,13 @@ import { initParams } from "../stores/routes"
 
 export type NoId<T> = Omit<T, 'id'>
 
-const baseUrl = 'http://localhost:2025/api'
+const baseUrl = 'https://aland97.ru/api'
 
 function getMasterId() {
   if (initParams.get('master_id') !== null) {
-    document.cookie = initParams.get('master_id') as string
+    localStorage.setItem('master_id', initParams.get('master_id') as string)
   }
-  return document.cookie
+  return localStorage.getItem('master_id') || ''
 }
 
 export async function baseApiFetch(path: string, method = 'GET', body = {}, headers = {}) {
