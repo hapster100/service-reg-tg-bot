@@ -19,6 +19,11 @@
     })
     $name = ''
   }
+
+  let valid = false
+
+  $: valid = $name.length > 0
+
 </script>
 
 <div class="fullw">
@@ -31,6 +36,6 @@
       <label for="priority">Приоритет</label>
       <input type="number" id="priority" bind:value={$priority} />
     </div>
-    <button type="submit">Добавить</button>
+    <button disabled={!valid} class:disabled-btn={!valid} type="submit">Добавить</button>
   </form>
 </div>

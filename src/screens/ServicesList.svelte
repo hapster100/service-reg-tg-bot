@@ -63,7 +63,12 @@
       </div>
     {/each}
     <button class="fullw" on:click={goTo.NewCategory}>Новая категория</button>
-    <button class="fullw" on:click={goTo.NewService}>Новая услуга</button>  
+    <button 
+      class="fullw"
+      class:disabled-btn={categories.length === 0}
+      disabled={categories.length === 0} 
+      on:click={goTo.NewService}
+    >Новая услуга</button>  
   </div>
 {/await}
 <BackToMenu />
