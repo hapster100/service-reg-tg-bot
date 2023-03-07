@@ -22,14 +22,14 @@
   function getDays(orders: Order[], services: Service[], shedulle: Shedulle) {
 
 const durationByServiceId = services.reduce((acc, service) => {
-  acc[service.id] = service.durationMinutes
+  acc[service.id] = service.durationMinutes || 0
   return acc
 }, {})
 
 const durationByDay = orders.reduce((acc, order) => {
   const day = order.date.getDate()
   acc[day] = acc[day] || 0 
-  acc[day] += order.serviceIds.reduce((sum, id) => sum + durationByServiceId[id], 0)
+  acc[day] += order.serviceIds.reduce((sum, id) => sum + (durationByServiceId[id] || 0), 0)
   return acc
 },  {})
 
