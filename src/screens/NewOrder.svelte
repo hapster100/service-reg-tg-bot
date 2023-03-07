@@ -13,6 +13,7 @@
   
   import { OrderStore, OrderStep } from '../stores/newOrder'
   import { onDestroy, onMount } from "svelte";
+  import Profile from "../components/newOrder/Profile.svelte";
   
   const { order } = history.state
   const store = new OrderStore(order)
@@ -55,6 +56,8 @@
       <SelectDate store={store} services={services} />
     {:else if $currentStep === OrderStep.Time}
       <SelectTime store={store} />
+    {:else if $currentStep === OrderStep.Profile}
+      <Profile store={store} />
     {:else if $currentStep === OrderStep.Success}
       <SuccessOrder store={store} />
     {/if}

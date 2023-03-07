@@ -8,6 +8,7 @@ export enum OrderStep {
   Services,
   Date,
   Time,
+  Profile,
   Success,
 }
 
@@ -30,6 +31,7 @@ export class OrderStore {
   readonly daySlots: Writable<Time[]>
   readonly slotsCache: Writable<SlotsCache>
   readonly orderId: string
+  readonly userId: string
   
   private form: OrderForm
   private initial: OrderForm
@@ -53,6 +55,7 @@ export class OrderStore {
     this.currentStep = writable(OrderStep.Services)
     this.daySlots = writable([])
     this.slotsCache = writable({})
+    this.userId = this.initial.userId
   }
 
   private makeInitial(order?: Order) : OrderForm {

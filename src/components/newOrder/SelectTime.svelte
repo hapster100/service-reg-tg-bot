@@ -2,9 +2,12 @@
   import { onMount } from 'svelte';
   import { getSlots } from '../../api/orders';
   import { getAllServices } from '../../api/services';
+  import { getUser } from '../../api/users';
   import type { Service } from '../../models/Service';
   import type { Time } from '../../models/Time';
   import { OrderStep, OrderStore } from '../../stores/newOrder'
+  import { goTo } from '../../stores/routes';
+  import { userId } from '../../stores/user';
   import Loader from '../Loader.svelte';
 
   export let store: OrderStore
@@ -12,7 +15,7 @@
   const {
     currentStep, daySlots, slotsCache,
     time, day, year, month,
-    serviceIds, orderId,
+    serviceIds, orderId
   } = store
 
   let process = false
@@ -20,12 +23,24 @@
   async function handle(time: Time) {
     $time = time
     process = true
-    try {
-      await store.makeOrder()
-    } finally {
-      process = false
-      $currentStep = OrderStep.Success
+
+    const user = await getUser(store.userId)
+
+    if (!user?.phone || !user.name) {
+      $currentStep = OrderStep.Profile
+    } else {
+      try {
+        await store.makeOrder()
+      } finally {
+        process = false
+        if (orderId) {
+          goTo.Shedulle()
+        } else {
+          $currentStep = OrderStep.Success
+        }
+      }
     }
+
   }
 
   let dates = [] as any[]
