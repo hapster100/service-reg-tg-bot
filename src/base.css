@@ -104,17 +104,18 @@ input:focus, select:focus {
 
 button {
   width: auto;
-    max-width: 100%;
-    margin: 0;
-    outline: none;
-    border: 0;
-    padding: 12px;
-    color: var(--color-bg);
-    background-color: var(--color-text);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-weight: bold;
-    border-radius: 8px;
+  max-width: 100%;
+  margin: 0;
+  outline: none;
+  border: 0;
+  padding: 12px;
+  color: var(--color-bg);
+  background-color: var(--color-text);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 8px;
+  height: 48px;
 }

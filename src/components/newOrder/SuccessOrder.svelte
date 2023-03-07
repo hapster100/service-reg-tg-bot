@@ -37,7 +37,7 @@
       {address}<br>
     </div>
     <div class="list">
-      <span class="list-title">Список услуг</span><br>
+      <div class="list-title">Список услуг:</div>
       {#each $serviceIds as id}
           <div class="item">{serviceById[id].name}</div>
       {/each}
@@ -73,5 +73,8 @@
     text-align: center;
   }
 
+  .item {
+    margin-top: 8px;
+  }
 
 </style>

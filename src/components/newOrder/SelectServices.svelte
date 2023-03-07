@@ -51,13 +51,15 @@
     categories={categories}
     on:select={add}
   />
-  <button class="fullw" on:click={() => $listOpen = false}>К списку</button>
+  {#if $serviceIds.length > 0}
+    <button class="fullw" on:click={() => $listOpen = false}>Выбранные услуги</button>
+  {/if} 
 {:else}
   <h3 class="page-title">Выбранные услуги</h3> 
   {#each $serviceIds as serviceId}
     <div class='service-info-wrapper'>
       <ServiceInfo service={serviceById[serviceId]}/>
-      <button on:click={() => remove(serviceId)}>⨯</button>
+      <button class="remove-btn" on:click={() => remove(serviceId)}>⨯</button>
     </div>
   {/each}
   <div class="new-order-total">
@@ -73,6 +75,9 @@
 {/if}
 
 <style>
+  .remove-btn {
+    height: auto;
+  }
   .service-info-wrapper {
     box-sizing: border-box;
     margin: auto;
