@@ -12,9 +12,12 @@
   export let orders: Order[]
   export let services: Service[]
 
-  const usersByIdPromise = getUsers([
+  const usersByIdPromise : Promise<{ [key: string] : User }> = getUsers([
     ...new Set(orders.map(order => order.userId))
-  ]).then(users => users.reduce((acc, user) => (acc[user.id] = user, acc), {} as {[key: string]: User}))
+  ]).then(users => users.reduce(
+    (acc, user) => (acc[user.id] = user, acc),
+    {} as { [key: string]: User }
+  ))
 
 </script>
 
@@ -22,17 +25,18 @@
   <Loader />
 {:then usersById}
   {#each orders as order}
+    {@const user = usersById[order.userId] || null}
     <div class="order fullw">
       <OrderInfo order={order} services={services} />
       <hr>
       <div class="user">
         <span class="user-prop">Имя:</span>
-        <span class="user-val">{usersById[order.userId]?.name || '---'}</span>
+        <span class="user-val">{user?.name || '---'}</span>
         <span class="user-prop">Телефон:</span>
         <span class="user-val">
-          {#if usersById[order.userId]?.phone}
-            <a class="phone-link" href="tel:{usersById[order.userId]?.phone}">
-              {usersById[order.userId]?.phone}
+          {#if user?.phone}
+            <a class="phone-link" href="tel:{user?.phone}">
+              {user?.phone}
             </a>
           {:else}
             ---          

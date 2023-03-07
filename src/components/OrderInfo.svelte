@@ -1,13 +1,22 @@
 <script lang="ts">
   import type { Order } from "../models/Order";
-  import type { Service } from "../models/Service";
+  import { Service } from "../models/Service";
   import ServiceInfo from "./ServiceInfo.svelte";
 
   export let order: Order
   export let services: Service[]
   
   const serviceById = services.reduce((acc, s) => (acc[s.id] = s, acc), {})
-  
+  const deletedService = new Service({
+    id: '',
+    name: 'Услуга удалена',
+    categoryId: '',
+    cost: 0,
+    durationMinutes: 0,
+    imageUrl: '',
+  })
+
+
 </script>
 
 <div class="order-date-time fullw">
@@ -24,7 +33,8 @@
 </div>
 <div class="order-services fullw">
   {#each order.serviceIds as serviceId}
-    <ServiceInfo service={serviceById[serviceId]} />
+    {@const service = serviceById[serviceId] || deletedService}
+    <ServiceInfo service={service} />
   {/each}
 </div>
 
