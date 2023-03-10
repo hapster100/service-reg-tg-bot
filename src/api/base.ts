@@ -8,7 +8,7 @@ function getMasterId() {
   if (initParams.get('master_id') !== null) {
     localStorage.setItem('master_id', initParams.get('master_id') as string)
   }
-  return localStorage.getItem('master_id') || ''
+  return localStorage.getItem('master_id') || 'test'
 }
 
 export async function baseApiFetch(path: string, method = 'GET', body = {}, headers = {}) {
