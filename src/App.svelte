@@ -7,6 +7,7 @@
   import EditCategory from "./screens/EditCategory.svelte";
   import EditService from "./screens/EditService.svelte";
   import MainMenu from "./screens/MainMenu.svelte"
+  import MasterInfo from "./screens/MasterInfo.svelte";
   import NewCategory from "./screens/NewCategory.svelte";
   import NewOrder from "./screens/NewOrder.svelte";
   import NewService from "./screens/NewService.svelte";
@@ -44,6 +45,7 @@
         <Route component={Shedulle} path={RoutePath.Shedulle} />
         <Route component={EditCategory} path={RoutePath.EditCategory} />
         <Route component={EditService} path={RoutePath.EditService} />
+        <Route component={MasterInfo} path={RoutePath.MasterInfo} />
       {/if}
     </Router>
   {:catch}

@@ -21,16 +21,27 @@
     await cancelOrder(id)
     $ordersPromise = myOrders()
   }
+
+  function filter(order: Order) {
+    const orderDate = new Date(order.date)
+    orderDate.setHours(order.time.hours)
+    orderDate.setMinutes(order.time.minutes)
+    return orderDate > new Date()
+  }
 </script>
 
 <h3 class="page-title">Мои записи</h3>
 {#await both}
   <Loader />
 {:then [orders, services]}
+  {@const filtered = orders.filter(filter)}
   <div class="fullw">
-    {#each orders as order}
+    {#each filtered as order}
       <div class="order">
-        <OrderInfo order={order} services={services}/>
+        <OrderInfo 
+          order={order}
+          services={services}
+        />
         <button on:click={() => cancel(order.id)}>Отменить</button>
       </div>
     {/each}

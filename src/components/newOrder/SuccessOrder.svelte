@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getAddress } from "../../api/masters";
+  import { getInfo } from "../../api/masters";
   import { getAllServices } from "../../api/services";
   import type { Service } from "../../models/Service";
   import type { OrderStore } from "../../stores/newOrder";
@@ -17,19 +17,19 @@
     day: 'numeric',
   })
 
-  const addressPromise = getAddress()
+  const infoPromise = getInfo()
 
 </script>
-{#await Promise.all([servicesByIdPromise, addressPromise])}
+{#await Promise.all([servicesByIdPromise, infoPromise])}
   <Loader />
-{:then [serviceById, address]}
+{:then [serviceById, info]}
   <div class="success">
     <h3 class="page-title">
       Запись успешно создана!
     </h3>
     <div class="info">
       Ждем вас в {$time} {dateStr}<br>
-      {address}<br>
+      {info.address}<br>
     </div>
     <div class="list">
       <div class="list-title">Список услуг:</div>

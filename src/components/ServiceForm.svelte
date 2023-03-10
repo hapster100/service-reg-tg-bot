@@ -4,6 +4,7 @@
   import type { Service } from "../models/Service";
   import Time from "./Time.svelte";
   import type { NoId } from "../api/base";
+  import ImageUrlInput from "./ImageUrlInput.svelte";
   export let categories: Category[]
 
   const STEP = 15
@@ -17,41 +18,6 @@
   const dispatch = createEventDispatcher<{
     'submit': NoId<Service>
   }>()
-
-  const handleImage = (e: Event & { currentTarget: HTMLInputElement }) => {
-    const file = e.currentTarget?.files?.item(0);
-    if (file) {
-      const reader = new FileReader();
-      reader.addEventListener('load', () => {
-        const img = new Image()
-        img.src = reader.result as string
-        img.onload = () => {
-          const canvas = document.createElement('canvas')
-          canvas.width = 400
-          canvas.height = 400
-
-          let dx = 0, dy = 0, w = img.width, h = img.height
-          
-          if (w/h > 1) {
-            dx = Math.floor(w/2 - h/2)
-            w = h
-          } else if (w/h < 1) {
-            dy = Math.floor(h/2 - w/2)
-            h = w
-          }
-
-          canvas.getContext('2d')?.drawImage(
-            img, dx, dy, w, h,
-            0, 0, canvas.width, canvas.height
-          )
-          
-          
-          imageUrl = canvas.toDataURL()
-        }
-      });
-      reader.readAsDataURL(file);
-    }
-  }
 
   let handler = (e: SubmitEvent) => {
     e.preventDefault()
@@ -76,6 +42,7 @@
   $: valid = cost > 0 && name.length > 1 && durationMinutes > 0
 
 </script>
+
 <div class="fullw">
   <form class="form" on:submit={handler}>
     <div class="form-field">
@@ -94,14 +61,7 @@
   
     <div class="form-field">
       <label for="url">Картинка</label>
-      <input type="file"
-        id="image" name="image"
-        accept="image/png, image/jpeg"
-        on:change={handleImage}
-      >
-      {#if imageUrl}
-        <img class="img-preview" src={imageUrl} alt="" />
-      {/if}
+      <ImageUrlInput bind:imageUrl />
     </div>
   
     <div class="form-field">
@@ -121,15 +81,3 @@
     <button disabled={!valid} class:disabled-btn={!valid} type="submit">Сохранить</button>
   </form>
 </div>
-
-<style>
-  .form-field input[type="file"] {
-    border: 0;
-  }
-  .img-preview {
-    margin-top: 8px;
-    width: 100%;
-    object-fit: cover;
-    aspect-ratio: 1.2;
-  }
-</style>

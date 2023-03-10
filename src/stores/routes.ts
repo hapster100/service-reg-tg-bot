@@ -11,6 +11,7 @@ export const Route = {
   EditCategory: '/editcategory',
   Shedulle: '/shedulle',
   Profile: '/profile',
+  MasterInfo: '/masterinfo',
 }
 
 
