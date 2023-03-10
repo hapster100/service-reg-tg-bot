@@ -1,11 +1,11 @@
 <script lang="ts">
 
   import { getAllCategories } from "../api/categories"
-  import { deleteService, getAllServices  } from "../api/services"
+  import { getAllServices  } from "../api/services"
   import type { Service } from "../models/Service"
   import Loader from "../components/Loader.svelte";
   import BackToMenu from "../components/BackToMenu.svelte";
-  import { goTo } from "../stores/routes";
+  import { goTo, goToWithState } from "../stores/routes";
   import type { Category } from "../models/Category";
   import ServiceInfo from "../components/ServiceInfo.svelte";
 
@@ -32,14 +32,6 @@
       ]
     }) as Promise<[Category[], ServiceByCategoryId]>
   }
-
-  function handleDeleteService(serviceId: string) {
-    return function() {
-      both = deleteService(serviceId).then(
-        fetchServicesAndCategories
-      )
-    }
-  }
 </script>
 
 {#await both}
@@ -48,23 +40,34 @@
   <div class="services-list fullw">
     <h3 class="page-title">Список услуг</h3>
     {#each categories as category}
-      <div class="category">
-        <h4> {category.name} ({category.priority})</h4>
+      <div class="category"> 
+        <div class="item-row">
+          <h4 class="category-info">{category.name} ({category.priority})</h4>
+          <button class="edit-btn" on:click={goToWithState.EditCategory({ category })}>
+            <span class="material-symbols-outlined">
+              edit
+            </span>
+          </button>
+        </div>
         {#if servicesByCategoryId[category.id]}
           <ul>
             {#each servicesByCategoryId[category.id] as service}
-              <li class='service-item'>
+              <li class='item-row'>
                 <ServiceInfo service={service} />
-                <button on:click={handleDeleteService(service.id)}>X</button>
+                <button class="edit-btn" on:click={goToWithState.EditService({ service })}>
+                  <span class="material-symbols-outlined">
+                    edit
+                  </span>
+                </button>
               </li>
             {/each}
           </ul>
         {/if}
       </div>
     {/each}
-    <button class="fullw" on:click={goTo.NewCategory}>Новая категория</button>
+    <button class="fullw mb-12" on:click={goTo.NewCategory}>Новая категория</button>
     <button 
-      class="fullw"
+      class="fullw mb-12"
       class:disabled-btn={categories.length === 0}
       disabled={categories.length === 0} 
       on:click={goTo.NewService}
@@ -74,29 +77,33 @@
 <BackToMenu />
 
 <style>
+
+  .edit-btn {
+    margin-left: 12px;
+    height: 32px;
+    width: 32px;
+  }
   .category {
     margin-bottom: 20px;
   }
 
-  .category ul, .category h4 {
-    margin: 0;
-  }
-
-  .category h4 {
-    margin-bottom: 8px;
-  }
-
   .category ul {
+    margin: 0;
     list-style: square;
   }
 
-  .service-item {
+  .item-row {
     display: flex;
     flex-direction: row;
     align-items: center;
   }
 
-  .services-list button {
+  .category-info {
+    margin: 0;
+  }
+
+  .mb-12 {
     margin-bottom: 12px;
   }
+
 </style>

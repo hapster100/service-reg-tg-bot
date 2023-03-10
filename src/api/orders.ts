@@ -28,11 +28,13 @@ export interface OrderForm {
 }
 
 export async function createOrder(order: OrderForm) {
-  return await baseApiFetch('/orders', 'POST', { order })
+  const res = await baseApiFetch('/orders', 'POST', { order })
+  return await res.json()
 }
 
 export async function updateOrder(order: Order) {
-  return await baseApiFetch('/orders/' + order.id, 'PUT', { order })
+  const res = await baseApiFetch('/orders/' + order.id, 'PUT', { order })
+  return await res.json()
 }
 
 export async function getOrders(year: number, month: number, day?: number) {
@@ -54,7 +56,8 @@ export async function myOrders() {
 }
 
 export async function cancelOrder(orderId: string) {
-  return await baseApiFetch('/orders/' + orderId, 'DELETE');
+  const res = await baseApiFetch('/orders/' + orderId, 'DELETE');
+  return await res.json()
 }
 
 export async function getSlots(

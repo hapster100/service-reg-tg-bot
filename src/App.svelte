@@ -4,6 +4,8 @@
   import Route from "./components/router/Route.svelte";
   import Router from "./components/router/Router.svelte"
   import type { User } from "./models/User";
+  import EditCategory from "./screens/EditCategory.svelte";
+  import EditService from "./screens/EditService.svelte";
   import MainMenu from "./screens/MainMenu.svelte"
   import NewCategory from "./screens/NewCategory.svelte";
   import NewOrder from "./screens/NewOrder.svelte";
@@ -40,6 +42,8 @@
         <Route component={NewService} path={RoutePath.NewService} />
         <Route component={NewCategory} path={RoutePath.NewCategory} />
         <Route component={Shedulle} path={RoutePath.Shedulle} />
+        <Route component={EditCategory} path={RoutePath.EditCategory} />
+        <Route component={EditService} path={RoutePath.EditService} />
       {/if}
     </Router>
   {:catch}

@@ -15,3 +15,14 @@ export async function addCategory(category: NoId<Category>) {
   const res = await baseApiFetch('/categories', 'POST', body)
   return res.json()
 }
+
+export async function updateCategory(category: Category) {
+  const body = { category }
+  const res = await baseApiFetch('/categories/' + category.id, 'PUT', body)
+  return res.json()
+}
+
+export async function deleteCategory(id: string) {
+  const res = await baseApiFetch('/categories/' + id, 'DELETE')
+  return res.json()
+}

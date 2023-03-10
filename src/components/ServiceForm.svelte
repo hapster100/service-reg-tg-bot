@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { writable } from "svelte/store";
   import { createEventDispatcher } from "svelte";
   import type { Category } from "../models/Category";
   import type { Service } from "../models/Service";
@@ -9,11 +8,11 @@
 
   const STEP = 15
 
-  const categoryId = writable(categories[0]?.id || '')
-  const name = writable('')
-  const imageUrl = writable('')
-  const durationMinutes = writable(STEP)
-  const cost = writable(0)
+  export let categoryId = categories[0]?.id || ''
+  export let name = ''
+  export let imageUrl = ''
+  export let durationMinutes = STEP
+  export let cost = 0
 
   const dispatch = createEventDispatcher<{
     'submit': NoId<Service>
@@ -47,46 +46,46 @@
           )
           
           
-          $imageUrl = canvas.toDataURL()
+          imageUrl = canvas.toDataURL()
         }
       });
       reader.readAsDataURL(file);
     }
   }
 
-  const handler = (e: SubmitEvent) => {
+  let handler = (e: SubmitEvent) => {
     e.preventDefault()
     const detail : NoId<Service> = {
-      categoryId: $categoryId,
-      name: $name,
-      imageUrl: $imageUrl,
-      durationMinutes: $durationMinutes,
-      cost: $cost,
+      categoryId,
+      name,
+      imageUrl,
+      durationMinutes,
+      cost,
     }
     dispatch('submit', detail)
 
-    $categoryId = categories[0]?.id || ''
-    $name = ''
-    $imageUrl = ''
-    $durationMinutes = STEP
-    $cost = 0
+    categoryId = categories[0]?.id || ''
+    name = ''
+    imageUrl = ''
+    durationMinutes = STEP
+    cost = 0
   }
 
   let valid = false
 
-  $: valid = $cost > 0 && $name.length > 1 && $durationMinutes > 0
+  $: valid = cost > 0 && name.length > 1 && durationMinutes > 0
 
 </script>
 <div class="fullw">
   <form class="form" on:submit={handler}>
     <div class="form-field">
       <label for="name">Название</label>
-      <input type="text" name="name" bind:value={$name}/>
+      <input type="text" name="name" bind:value={name}/>
     </div>
   
     <div class="form-field">
       <label for="category">Категория</label>
-      <select name="category" bind:value={$categoryId}>
+      <select name="category" bind:value={categoryId}>
         {#each categories as category}
           <option value={category.id}>{category.name}</option>
         {/each}
@@ -100,8 +99,8 @@
         accept="image/png, image/jpeg"
         on:change={handleImage}
       >
-      {#if $imageUrl}
-        <img class="img-preview" src={$imageUrl} alt="" />
+      {#if imageUrl}
+        <img class="img-preview" src={imageUrl} alt="" />
       {/if}
     </div>
   
@@ -109,17 +108,17 @@
       <label for="duration">Длительность</label>
       <input type="range" name="duration" 
         min={STEP} max="360" step={STEP}
-        bind:value={$durationMinutes}
+        bind:value={durationMinutes}
       />
-      <Time duration={$durationMinutes} />
+      <Time duration={durationMinutes} />
     </div>
   
     <div class="form-field">
       <label for="cost">Стоимость</label>
-      <input type="number" name="cost" bind:value={$cost} />
+      <input type="number" name="cost" bind:value={cost} />
     </div>
 
-    <button disabled={!valid} class:disabled-btn={!valid} type="submit">Добавить</button>
+    <button disabled={!valid} class:disabled-btn={!valid} type="submit">Сохранить</button>
   </form>
 </div>
 

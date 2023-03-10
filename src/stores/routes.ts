@@ -6,9 +6,11 @@ export const Route = {
   MyOrders: '/mylist',
   ServicesList: '/services',
   NewService: '/newservice',
+  EditService: '/editservice',
   NewCategory: '/newcategory',
+  EditCategory: '/editcategory',
   Shedulle: '/shedulle',
-  Profile: '/profile'
+  Profile: '/profile',
 }
 
 
