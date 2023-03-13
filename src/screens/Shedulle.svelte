@@ -4,11 +4,10 @@
   import { getAllServices } from "../api/services";
   import { getShedulle, updateShedulle } from "../api/shedulle";
   import BackToMenu from "../components/BackToMenu.svelte";
-  import Calendar, { type WithDay } from "../components/Calendar.svelte";
-  import IntervalInput from "../components/IntervalInput.svelte";
-  import OrderInfo from "../components/OrderInfo.svelte";
   import OrdersShedulle from "../components/shedulle/OrdersShedulle.svelte";
   import ShedulleOrders from "../components/shedulle/ShedulleOrders.svelte";
+  import WorkHoursCalendar from "../components/shedulle/WorkHoursCalendar.svelte";
+  import WorkHoursIntervals from "../components/shedulle/WorkHoursIntervals.svelte";
   import type { Order } from "../models/Order";
   import type { Service } from "../models/Service";
   import { Interval, Shedulle } from "../models/Shedulle";
@@ -24,6 +23,7 @@
 
   const selected = writable(new Set() as Set<number>)
   const free = writable(true)
+  const times = writable([] as {start: Time, end: Time}[])
 
   let dayStart = 0;
   let breakStart = 0.4
@@ -91,47 +91,13 @@
     month: 'long',
     year: 'numeric',
   })
-  
-  function getSelectedDays(shedulle: Shedulle, selected: Set<number>) {
-    const days = {}
-    for(let key in shedulle) {
-      const classes = ['day']
-      classes.push(selected.has(+key) ? 'selected' : 'unselected')
-      classes.push(shedulle[+key].free ? 'free' : 'not-free')
-      days[+key] = {
-        active: true,
-        class: classes.join(' ')
-      }
-    }
-    return days
-  }
-
-  function toggleSelect({detail}: {detail: WithDay}) {
-    selected.update(set => {
-      if (set.has(detail.day)) {
-        set.delete(detail.day)
-      } else {
-        set.add(detail.day)
-      }
-      return set
-    })
-  }
 
   async function edit() {
     const intervals = [] as Interval[]
-    if (fromNormalized(breakStart).toMinutes() === fromNormalized(breakEnd).toMinutes()) {
+    for(const interval of $times) {
       intervals.push(new Interval({
-        from: fromNormalized(dayStart).toMinutes(),
-        to: fromNormalized(dayEnd).toMinutes(),
-      }))
-    } else {
-      intervals.push(new Interval({
-        from: fromNormalized(dayStart).toMinutes(),
-        to: fromNormalized(breakStart).toMinutes()
-      }))
-      intervals.push(new Interval({
-        from: fromNormalized(breakEnd).toMinutes(),
-        to: fromNormalized(dayEnd).toMinutes()
+        from: interval.start.toMinutes(),
+        to: interval.end.toMinutes(),
       }))
     }
 
@@ -183,58 +149,18 @@
       shedulle={$shedulle}
     />
   {:else}
-    <Calendar
-      on:click={toggleSelect}
+    <WorkHoursCalendar
       on:next={nextMonth}
       on:prev={prevMonth}
       year={$year}
       month={$month}
-      days={getSelectedDays($shedulle, $selected)}
-    >
-    <style>
-      .day {
-        width: 100%;
-        height: 100%;
-        border-radius: 0;
-      }
-      .selected {
-        background-color: var(--color-text);
-      }
-
-      
-      .unselected {
-        background-color: var(--color-bg);
-        color: var(--color-text);
-      }
-
-      .selected.free {
-        background-color: grey;
-        color: var(--color-bg);
-      }
-
-      .free {
-        color: grey;
-      }
-    </style>
-    </Calendar>
-    <div class="free-field">
-      <label for="free">Выходной:</label>
-      <input bind:checked={$free} name="free" type="checkbox"/>
-    </div>
-    <div class="interval-input fullw">
-      <IntervalInput 
-        bind:dayStart bind:dayEnd
-        bind:breakStart bind:breakEnd
-      />
-    </div>
-    <div class="interval fullw">
-      Рабочие часы: {fromNormalized(dayStart)} - {fromNormalized(dayEnd)}
-    </div>
-    {#if fromNormalized(breakStart).toMinutes() !== fromNormalized(breakEnd).toMinutes()}
-      <div class="interval fullw">
-        Перерыв: {fromNormalized(breakStart)} - {fromNormalized(breakEnd)}
-      </div>
-    {/if}
+      shedulle={$shedulle}
+      bind:selected={$selected}
+    />
+    <WorkHoursIntervals
+      bind:free={$free}
+      bind:times={$times}
+    />
     <button class="fullw edit-btn" on:click={edit}>Изменить</button>
   {/if}
 {/if}
@@ -254,14 +180,6 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
-  }
-  
-  .interval-input {
-    margin: 20px;
-  }
-
-  .interval {
-    margin-bottom: 12px;
   }
 
   .mode-ctrl button {
@@ -292,28 +210,6 @@
 
   h3 {
     margin: 8px;
-  }
-
-  .free-field {
-    width: 100%;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-  }
-
-  .free-field label {
-    display: block;
-    height: 100%;
-  }
-
-  .free-field input {
-    display: block;
-    height: 20px;
-    width: 20px;
-    border: 1px solid var(--color-text);
-    outline: none;
-    background-color: var(--color-text);
-    accent-color: var(--color-text);
   }
 
 </style>
