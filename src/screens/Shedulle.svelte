@@ -25,15 +25,6 @@
   const free = writable(true)
   const times = writable([] as {start: Time, end: Time}[])
 
-  function fromNormalized(n: number) {
-    const min = 7 * 60
-    const max = 23 * 60
-    const step = 60
-    const minutes = (max - min) * n + min
-    const steps = Math.round(minutes/step)
-    return Time.fromMinutes(steps * step)
-  }
-
   $: getAllServices().then(res => $services = res)
   $: {
     $orders = []
