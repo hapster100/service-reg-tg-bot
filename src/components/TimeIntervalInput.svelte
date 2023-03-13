@@ -70,6 +70,7 @@
     max-width: 80px;
     height: 48px;
     background-color: var(--color-bg);
+    padding: 8px;
   }
 
   .mr-12 {

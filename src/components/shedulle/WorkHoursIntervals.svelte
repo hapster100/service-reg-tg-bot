@@ -79,7 +79,7 @@
 {#if !free}
   <div class="day-setting fullw">
     <div class="times">
-      <div class="section-title">Расписание</div>
+      <div class="section-title">Расписание:</div>
       <div class="mb-12">
         <ul>
           {#each times as time}
@@ -92,7 +92,7 @@
     </div>
     <div class="work-hours">
       <div class="section-title">
-        Рабочие часы
+        Рабочие часы:
       </div>
       <div class="interval mb-20">
         <TimeIntervalInput
@@ -103,7 +103,7 @@
     </div>
     <div class="frees">
       <div class="section-title">
-        Перерывы
+        Перерывы:
       </div>
       <div class="mb-20">
         {#if intervals.length}
@@ -145,6 +145,18 @@
     grid-template-areas:
       "hours-area frees-area"
       "times-area frees-area";
+  }
+
+  @media screen and (max-width: 400px) {
+    .day-setting {
+      grid-template-columns: auto;
+      grid-template-rows: auto;
+      row-gap: 12px;
+      grid-template-areas: 
+      "hours-area"
+      "frees-area"
+      "times-area";
+    }
   }
 
   .work-hours {
