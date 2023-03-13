@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getUser, updateUser } from "./api/users";
+  import { getUser } from "./api/users";
   import Loader from "./components/Loader.svelte";
   import Route from "./components/router/Route.svelte";
   import Router from "./components/router/Router.svelte"
