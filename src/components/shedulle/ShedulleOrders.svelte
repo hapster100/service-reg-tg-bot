@@ -4,7 +4,6 @@
   import type { Service } from "../../models/Service";
   import type { User } from "../../models/User";
   import { goToWithState } from "../../stores/routes";
-  import { userId } from "../../stores/user";
   import Loader from "../Loader.svelte";
   import OrderInfo from "../OrderInfo.svelte";
 

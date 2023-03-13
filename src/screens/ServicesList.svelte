@@ -8,6 +8,7 @@
   import { goTo, goToWithState } from "../stores/routes";
   import type { Category } from "../models/Category";
   import ServiceInfo from "../components/ServiceInfo.svelte";
+  import Icon from "../components/Icon.svelte";
 
   type ServiceByCategoryId = {[key: string]: Service[]}
   let both = fetchServicesAndCategories()
@@ -44,9 +45,7 @@
         <div class="item-row">
           <h4 class="category-info">{category.name} ({category.priority})</h4>
           <button class="edit-btn" on:click={goToWithState.EditCategory({ category })}>
-            <span class="material-symbols-outlined">
-              edit
-            </span>
+            <Icon icon="edit"/>
           </button>
         </div>
         {#if servicesByCategoryId[category.id]}
@@ -55,9 +54,7 @@
               <li class='item-row'>
                 <ServiceInfo service={service} />
                 <button class="edit-btn" on:click={goToWithState.EditService({ service })}>
-                  <span class="material-symbols-outlined">
-                    edit
-                  </span>
+                  <Icon icon="edit" />
                 </button>
               </li>
             {/each}

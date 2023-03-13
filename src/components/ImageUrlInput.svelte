@@ -1,4 +1,6 @@
 <script lang='ts'>
+  import Icon from "./Icon.svelte";
+
   export let imageUrl: string
 
   const handleImage = (e: Event & { currentTarget: HTMLInputElement }) => {
@@ -46,7 +48,7 @@
   <div class="img-wrapper">
     <img class="img-preview" src={imageUrl} alt="" />
     <button class="clear-btn" on:click={_ => imageUrl = ''}>
-      <span class="material-symbols-outlined">delete</span>
+      <Icon icon="delete"/>
     </button>
   </div>
 {/if}
