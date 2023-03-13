@@ -101,12 +101,14 @@
 >
   <style>
     .active {
-      color: var(--color-text);
-      background-color: var(--color-bg);
+      color: var(--color-bg);
+      background-color: var(--color-text);
       padding: 0;
       margin: 0;
+      width: calc(100% - 4px);
+      height: calc(100% - 4px);
+      border-radius: 0;
       font-size: 100%;
-      text-decoration: underline;
     }
 
     .not-active {
