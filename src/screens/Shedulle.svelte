@@ -25,11 +25,6 @@
   const free = writable(true)
   const times = writable([] as {start: Time, end: Time}[])
 
-  let dayStart = 0;
-  let breakStart = 0.4
-  let breakEnd = 0.6
-  let dayEnd = 1;
-
   function fromNormalized(n: number) {
     const min = 7 * 60
     const max = 23 * 60
