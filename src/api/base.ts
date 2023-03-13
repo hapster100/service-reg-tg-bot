@@ -2,7 +2,7 @@ import { initParams } from "../stores/routes"
 
 export type NoId<T> = Omit<T, 'id'>
 
-const baseUrl = 'https://aland97.ru/api'
+const baseUrl = import.meta.env.VITE_API_URL
 
 function getMasterId() {
   if (initParams.get('master_id') !== null) {
