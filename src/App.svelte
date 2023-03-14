@@ -20,7 +20,7 @@
 
   const updateAdmin = (user: User|null) => {
     if (user?.isAdmin) {
-      $isAdmin = user.isAdmin
+      $isAdmin = user.isAdmin || import.meta.env.VITE_DEV_MOD === '1'
     }
     return user
   }
