@@ -1,7 +1,7 @@
 import { Order } from "../models/Order"
 import { Time } from "../models/Time"
 import { userId } from "../stores/user"
-import { baseApiFetch, type NoId } from "./base"
+import { baseApiFetch, type Success } from "./base"
 
 function toOrder(raw: any) {
   return new Order({
@@ -55,9 +55,10 @@ export async function myOrders() {
   return orders
 }
 
-export async function cancelOrder(orderId: string) {
+export async function cancelOrder(orderId: string) : Promise<Success> {
   const res = await baseApiFetch('/orders/' + orderId, 'DELETE');
-  return await res.json()
+  const json = await res.json()
+  return json
 }
 
 export async function getSlots(

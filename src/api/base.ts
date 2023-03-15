@@ -2,6 +2,10 @@ import { initParams } from "../stores/routes"
 
 export type NoId<T> = Omit<T, 'id'>
 
+export interface Success {
+  success: boolean
+} 
+
 const baseUrl = import.meta.env.VITE_API_URL
 
 function getMasterId() {
