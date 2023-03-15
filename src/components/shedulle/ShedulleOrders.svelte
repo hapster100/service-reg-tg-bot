@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { createEventDispatcher } from "svelte";
   import { getUsers } from "../../api/users";
   import type { Order } from "../../models/Order";
   import type { Service } from "../../models/Service";
@@ -17,6 +18,10 @@
     (acc, user) => (acc[user.id] = user, acc),
     {} as { [key: string]: User }
   ))
+
+  const dispatch = createEventDispatcher<{
+    'delete': Order
+  }>()
 
 </script>
 
@@ -43,7 +48,7 @@
         </span>
       </div>
       <div class="fullw controls">
-        <!-- <button class="outline-btn controls-btn" on:click={() => {}}>Отменить</button> -->
+        <button class="outline-btn controls-btn" on:click={() => dispatch('delete', order)}>Отменить</button>
         <button class="outline-btn controls-btn" on:click={goToWithState.NewOrder({order})}>Изменить</button>
       </div>
     </div>

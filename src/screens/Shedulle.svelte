@@ -1,6 +1,6 @@
 <script lang="ts">
   import { writable } from "svelte/store";
-  import { getOrders } from "../api/orders";
+  import { cancelOrder, getOrders } from "../api/orders";
   import { getAllServices } from "../api/services";
   import { getShedulle, updateShedulle } from "../api/shedulle";
   import BackToMenu from "../components/BackToMenu.svelte";
@@ -99,7 +99,15 @@
     $shedulle = newShedule
   }
 
+  async function handleCancelOrder({ detail }: CustomEvent<Order>) {
+    const { success } = await cancelOrder(detail.id)
+    if (success) {
+      $orders = $orders.filter(ord => ord.id !== detail.id)
+    }
+  }
+
 </script>
+
 {#if $day > 0}
   <h3 class="page-title">{dayString}</h3>
   <ul class="fullw">
@@ -109,7 +117,11 @@
     </li>  
     {/each}
   </ul>
-  <ShedulleOrders orders={$orders.filter(({ date }) => date.getDate() === $day)} services={$services}/>
+  <ShedulleOrders
+    orders={$orders.filter(({ date }) => date.getDate() === $day)}
+    services={$services}
+    on:delete={handleCancelOrder}
+  />
 <button class="back-btn fullw" on:click={() => $day = 0}>К датам</button>
 {:else}
   <h3 class="page-title">Расписание</h3>
