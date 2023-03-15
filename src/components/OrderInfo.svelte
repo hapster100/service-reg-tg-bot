@@ -1,12 +1,15 @@
 <script lang="ts">
   import type { Order } from "../models/Order";
   import { Service } from "../models/Service";
+  import { Time } from "../models/Time";
   import ServiceInfo from "./ServiceInfo.svelte";
 
   export let order: Order
   export let services: Service[]
   
-  const serviceById = services.reduce((acc, s) => (acc[s.id] = s, acc), {})
+  const serviceById = services.reduce((acc, s) => (acc[s.id] = s, acc), {} as {
+    [key: string]: Service
+  })
   const deletedService = new Service({
     id: '',
     name: 'Услуга удалена',
@@ -15,13 +18,16 @@
     durationMinutes: 0,
     imageUrl: '',
   })
-
+  const totalTime = order.serviceIds.reduce(
+    (t, id) => t + (serviceById[id] || deletedService).durationMinutes, 0
+  )
+  const endTime = Time.fromMinutes(order.time.toMinutes() + totalTime)
 
 </script>
 
 <div class="order-date-time fullw">
   <span class="time">
-    {order.time}
+    {order.time} - {endTime}
   </span>
   <span class="date">
     {order.date.toLocaleString('ru', {
