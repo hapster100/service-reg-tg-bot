@@ -159,7 +159,7 @@
       bind:free={$free}
       bind:times={$times}
     />
-    <button class="fullw edit-btn" on:click={edit}>Изменить</button>
+    <button class="fullw edit-btn" on:click={edit}>Сохранить</button>
   {/if}
 {/if}
 
