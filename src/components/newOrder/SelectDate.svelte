@@ -111,6 +111,15 @@
       font-size: 100%;
     }
 
+    .calendar-row:last-child .calendar-cell:first-child .active {
+      border-bottom-left-radius: 8px;
+    }
+
+
+    .calendar-row:last-child .calendar-cell:last-child .active {
+      border-bottom-right-radius: 8px;
+    }
+
     .not-active {
       color: grey;
       cursor: not-allowed;
