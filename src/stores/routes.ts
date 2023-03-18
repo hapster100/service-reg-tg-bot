@@ -12,6 +12,7 @@ export const Route = {
   Shedulle: '/shedulle',
   Profile: '/profile',
   MasterInfo: '/masterinfo',
+  CurrentDay: '/currentday',
 }
 
 

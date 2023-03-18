@@ -4,6 +4,7 @@
   import Route from "./components/router/Route.svelte";
   import Router from "./components/router/Router.svelte"
   import type { User } from "./models/User";
+  import CurrentDayShedulle from "./screens/CurrentDayShedulle.svelte";
   import EditCategory from "./screens/EditCategory.svelte";
   import EditService from "./screens/EditService.svelte";
   import MainMenu from "./screens/MainMenu.svelte"
@@ -46,6 +47,7 @@
         <Route component={EditCategory} path={RoutePath.EditCategory} />
         <Route component={EditService} path={RoutePath.EditService} />
         <Route component={MasterInfo} path={RoutePath.MasterInfo} />
+        <Route component={CurrentDayShedulle} path={RoutePath.CurrentDay} />
       {/if}
     </Router>
   {:catch}

@@ -9,6 +9,7 @@
   <button on:click={goTo.Profile}>Профиль</button>
   {#if $isAdmin}
     <hr class="fullw" />
+    <button on:click={goTo.CurrentDay}>Дневное расписание</button>
     <button on:click={goTo.ServicesList}>Список услуг</button>
     <button on:click={goTo.Shedulle}>Расписание</button>
     <button on:click={goTo.MasterInfo}>Профиль мастера</button>

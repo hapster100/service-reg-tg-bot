@@ -7,6 +7,7 @@
   import { OrderStep, OrderStore } from '../../stores/newOrder'
   import { goTo } from '../../stores/routes';
   import Loader from '../Loader.svelte';
+  import PrevNextButtons from '../PrevNextButtons.svelte';
 
   export let store: OrderStore
 
@@ -128,22 +129,14 @@
 {#if process}
   <Loader />
 {:else}
-  <div class="change-day mb-12">
-    <button  class="change-day-btn"
-      class:disabled-btn={!prevDay}
-      on:click={prevDay ? handleChangeDay(prevDay) : null}
-    >
-      {'<'}
-    </button>
-    <div class="current-day">
-      {currDay.toLocaleString('ru', { day: 'numeric', month: 'long'})}
-    </div>
-    <button class="change-day-btn"
-      class:disabled-btn={!nextDay}
-      on:click={nextDay ? handleChangeDay(nextDay) : null}
-    >
-      {'>'}
-    </button>
+  <div class="mb-12">
+    <PrevNextButtons
+      nextDisabled={!nextDay}
+      prevDisabled={!prevDay}
+      currentText={currDay.toLocaleString('ru', { day: 'numeric', month: 'long'})}
+      on:next={handleChangeDay(nextDay ?? currDay)}
+      on:prev={handleChangeDay(prevDay ?? currDay)}
+    />
   </div>
   <div class="select-time mb-20">
     {#each $daySlots as slot}
@@ -156,37 +149,6 @@
 <button class="fullw" on:click={() => $currentStep = OrderStep.Date}>Назад</button>
 
 <style>
-
-  .current-day {
-    flex: 2;
-    border: 1px solid var(--color-text);
-    border-right: 0;
-    border-left: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .change-day-btn {
-    flex: 1;
-  }
-
-  .change-day-btn:first-child {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-  }
-
-  .change-day-btn:last-child {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-  }
-
-  .change-day {
-    width: 100%;
-    padding: 2px 0;
-    display: flex;
-    flex-direction: row;
-  }
   .select-time {
     display: grid;
     grid-template-columns: repeat(4, calc((100% - 24px)/4));
