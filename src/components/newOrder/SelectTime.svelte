@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   import { getSlots } from '../../api/orders';
   import { getAllServices } from '../../api/services';
   import { getUser } from '../../api/users';
@@ -7,7 +6,6 @@
   import type { Time } from '../../models/Time';
   import { OrderStep, OrderStore } from '../../stores/newOrder'
   import { goTo } from '../../stores/routes';
-  import { userId } from '../../stores/user';
   import Loader from '../Loader.svelte';
 
   export let store: OrderStore
@@ -43,52 +41,45 @@
 
   }
 
-  let dates = [] as any[]
+  function handleChangeDay(date: Date) {
+    return function () {
+      $day = date.getDate()
+      $month = date.getMonth()
+      $year = date.getFullYear()
+      $daySlots = $slotsCache[date.getFullYear()]?.[date.getMonth()]?.[date.getDate()] || []
+    }
+  }
 
-  let btns = [] as {
-    date: Date
-    current: boolean
-    disabled: boolean
-    click: EventListener
-  }[]
+  async function updateCache(year: number, month: number) {
+    const services = await getAllServices()
+    const serviceById = services.reduce((acc, s) => (acc[s.id] = s, acc), {} as {[key: string]: Service})
+    const duration = $serviceIds.map(id => serviceById[id].durationMinutes).reduce((a, b) => a + b, 0)
+    const slots = await getSlots(year, month, duration, orderId)
+    slotsCache.update(cache => ({
+      ...cache,
+      [year]: {
+        ...(cache[year] || {}),
+        [month]: slots,
+      }
+    }))
+  }
+
+  let currDay: Date
+  let prevDay: Date|null = null
+  let nextDay: Date|null = null
+
+  let nextMonth: Date
+  let prevMonth: Date
   
-  let scrollInner: HTMLDivElement
-  let scrollOuter: HTMLDivElement
-  onMount(() => {
-    scrollOuter.scrollLeft = (-scrollOuter.clientWidth + scrollInner.clientWidth)/2
-  })
+  $: {
+    currDay = new Date($year, $month, $day)
+    nextMonth = new Date($year, $month + 1, 1)
+    prevMonth = new Date($year, $month - 1, 1)
+  }
+  
 
   $: {
-    dates = new Array(9).fill(0).map((_, i) => new Date($year, $month, $day + i - 4))
-    btns = dates.map(date => {
-      const slots = $slotsCache[date.getFullYear()]?.[date.getMonth()]?.[date.getDate()]
-      return {
-        date,
-        current: date.getDate() === $day,
-        disabled: !slots || slots.length === 0,
-        click: () => {
-          $day = date.getDate()
-          $month = date.getMonth()
-          $year = date.getFullYear()
-          $daySlots = slots || []
-        }
-      }
-    })
-    const updateCache = async (year: number, month: number) => {
-      const services = await getAllServices()
-      const serviceById = services.reduce((acc, s) => (acc[s.id] = s, acc), {} as {[key: string]: Service})
-      const duration = $serviceIds.map(id => serviceById[id].durationMinutes).reduce((a, b) => a + b, 0)
-      const slots = await getSlots(year, month, duration, orderId)
-      slotsCache.update(cache => ({
-        ...cache,
-        [year]: {
-          ...(cache[year] || {}),
-          [month]: slots,
-        }
-      }))
-    }
-
-    for(const date of dates) {
+    for(const date of [nextMonth, prevMonth]) {
       const month = date.getMonth()
       const year = date.getFullYear()
       const cache = $slotsCache[year]?.[month]
@@ -98,30 +89,63 @@
     }
   }
 
+  $: {
+    const days = [prevMonth, currDay, nextMonth]
+      .flatMap(date => {
+        const month = date.getMonth()
+        const year = date.getFullYear()
+        const cache = $slotsCache[year]?.[month]
+
+        if (cache === null || cache === undefined) return []
+        
+        const days = Object.keys(cache).map(Number)
+        return days
+          .filter(day => cache[day].length > 0)
+          .map(day => new Date(year, month, day))
+      })
+    
+    let newNext: Date|null = null
+    let newPrev: Date|null = null
+
+    for(const date of days) {
+      if (date > currDay) {
+        if (!newNext) newNext = date
+        if (newNext > date) newNext = date
+      }
+      if (date < currDay) {
+        if (!newPrev) newPrev = date
+        if (newPrev < date) newPrev = date
+      }
+    }
+
+    prevDay = newPrev
+    nextDay = newNext
+  }
+
 </script>
 
 <h3 class="page-title">Выбор времени</h3>
 {#if process}
   <Loader />
 {:else}
-  <div bind:this={scrollOuter} class="change-day-scroll">
-    <div bind:this={scrollInner} class="change-day">
-      {#each btns as {current, disabled, date, click}}  
-        <button
-          class="day-btn"
-          class:disabled-btn={disabled}
-          class:outline-btn={current}
-          class:current-day={current}
-          disabled={disabled || current}
-          on:click={click}
-        >{date.toLocaleString('ru', {
-          day: 'numeric',
-          month: '2-digit',
-        })}</button>
-      {/each}
+  <div class="change-day mb-12">
+    <button  class="change-day-btn"
+      class:disabled-btn={!prevDay}
+      on:click={prevDay ? handleChangeDay(prevDay) : null}
+    >
+      {'<'}
+    </button>
+    <div class="current-day">
+      {currDay.toLocaleString('ru', { day: 'numeric', month: 'long'})}
     </div>
+    <button class="change-day-btn"
+      class:disabled-btn={!nextDay}
+      on:click={nextDay ? handleChangeDay(nextDay) : null}
+    >
+      {'>'}
+    </button>
   </div>
-  <div class="select-time">
+  <div class="select-time mb-20">
     {#each $daySlots as slot}
       <button class="outline-btn time-slot" on:click={() => handle(slot)}>
         {slot}
@@ -133,35 +157,39 @@
 
 <style>
 
-  
-  .day-btn {
-    flex: 1;
-    margin-right: 2px;
-  }
-  .day-btn:last-child {
-    margin-right: 0;
-  }
-
-  .day-btn.current-day {
-    flex: 1;
-    border: 0;
+  .current-day {
+    flex: 2;
+    border: 1px solid var(--color-text);
+    border-right: 0;
+    border-left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  .change-day-scroll {
-    overflow-x: scroll;
-    margin-bottom: 12px;
+  .change-day-btn {
+    flex: 1;
   }
+
+  .change-day-btn:first-child {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .change-day-btn:last-child {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
   .change-day {
+    width: 100%;
     padding: 2px 0;
     display: flex;
     flex-direction: row;
-    align-items: center;
-    align-self: center;
   }
   .select-time {
     display: grid;
     grid-template-columns: repeat(4, calc((100% - 24px)/4));
-    margin-bottom: 20px;
     gap: 8px;
   }
 </style>
