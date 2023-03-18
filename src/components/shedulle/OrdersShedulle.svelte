@@ -55,8 +55,8 @@ for(let i = 1; i <= numDays; i++) {
 
     const hours = (durationByDay[i] || 0) / 60
     if (hours > 0) className = 'day easy'
-    if (hours >= 5) className = 'day medium'
-    if (hours >= 10) className = 'day hard'
+    if (hours >= 4) className = 'day medium'
+    if (hours >= 8) className = 'day hard'
   }
 
   days[i] = { active: true, class: className }
@@ -109,9 +109,9 @@ return days
   <span class="day past">i</span> прошедший день
   <span class="day free">i</span> выходной
   <span class="day no">i</span> нет записи
-  <span class="day easy">i</span> 0-5ч работы
-  <span class="day medium">i</span> 5-10ч работы
-  <span class="day hard">i</span> 10+ч работы
+  <span class="day easy">i</span> 0-4ч работы
+  <span class="day medium">i</span> 4-8ч работы
+  <span class="day hard">i</span> 8+ч работы
 </div>
 
 <style>
