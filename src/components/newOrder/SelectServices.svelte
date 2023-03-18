@@ -37,8 +37,7 @@
   }
   
   function add({ detail: serviceId }) {
-    const next = [...$serviceIds, serviceId]
-    $serviceIds = [...new Set(next)]
+    $serviceIds = [...$serviceIds, serviceId]
     $listOpen = false
   }
 
@@ -47,7 +46,7 @@
 {#if $listOpen}
   <h3 class="page-title">Выбор услуги</h3>
   <ServicesList 
-    services={services.filter(s => !$serviceIds.includes(s.id))}
+    services={services}
     categories={categories}
     on:select={add}
   />

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getOrders } from '../api/orders'
+  import { cancelOrder, getOrders } from '../api/orders'
   import { getAllServices } from '../api/services';
   import BackToMenu from '../components/BackToMenu.svelte';
   import Loader from '../components/Loader.svelte';
@@ -18,6 +18,13 @@
   
   function prevDay() {
     date = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1)
+  }
+
+  async function handleCancelOrder({ detail }: CustomEvent<Order>) {
+    const { success } = await cancelOrder(detail.id)
+    if (success) {
+      orders = orders.filter(ord => ord.id !== detail.id)
+    }
   }
 
   let orders = [] as Order[]
@@ -45,9 +52,7 @@
       <ShedulleOrders
         orders={orders}
         services={services}
-        on:delete={({detail}) => {
-          orders = orders.filter(order => order.id !== detail.id)
-        }}
+        on:delete={handleCancelOrder}
       />
     {:else}
       <div class="no-orders fullw">
