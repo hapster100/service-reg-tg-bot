@@ -6,9 +6,6 @@
   import PrevNextButtons from '../components/PrevNextButtons.svelte';
   import ShedulleOrders from '../components/shedulle/ShedulleOrders.svelte';
   import type { Order } from '../models/Order'
-  import type { Service } from '../models/Service'
-
-
 
   let date = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())
   
@@ -23,17 +20,13 @@
   async function handleCancelOrder({ detail }: CustomEvent<Order>) {
     const { success } = await cancelOrder(detail.id)
     if (success) {
-      orders = orders.filter(ord => ord.id !== detail.id)
+      ordersPromise = getOrders(date.getFullYear(), date.getMonth(), date.getDate())
     }
   }
 
-  let orders = [] as Order[]
   let servicesPromise = getAllServices()
 
-  $: {
-    getOrders(date.getFullYear(), date.getMonth(), date.getDate())
-      .then(res => orders = res)
-  }
+  $: ordersPromise = getOrders(date.getFullYear(), date.getMonth(), date.getDate())
 
 </script>
 
@@ -45,9 +38,9 @@
   />
 </div>
 <div class="orders mb-20 fullw">
-  {#await servicesPromise}
+  {#await Promise.all([servicesPromise, ordersPromise])}
     <Loader />
-  {:then services}
+  {:then [services, orders]}
     {#if orders.length > 0}
       <ShedulleOrders
         orders={orders}

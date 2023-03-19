@@ -12,7 +12,7 @@
   export let orders: Order[]
   export let services: Service[]
 
-  const usersByIdPromise : Promise<{ [key: string] : User }> = getUsers([
+  $: usersByIdPromise = getUsers([
     ...new Set(orders.map(order => order.userId))
   ]).then(users => users.reduce(
     (acc, user) => (acc[user.id] = user, acc),
@@ -28,7 +28,7 @@
 {#await usersByIdPromise}
   <Loader />
 {:then usersById}
-  {#each orders as order}
+  {#each orders as order (order.id)}
     {@const user = usersById[order.userId] || null}
     <div class="order fullw">
       <OrderInfo order={order} services={services} />
