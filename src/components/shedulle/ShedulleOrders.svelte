@@ -7,6 +7,7 @@
   import { goToWithState } from "../../stores/routes";
   import Loader from "../Loader.svelte";
   import OrderInfo from "../OrderInfo.svelte";
+  import UserInfo from "../UserInfo.svelte";
 
 
   export let orders: Order[]
@@ -31,22 +32,9 @@
   {#each orders as order (order.id)}
     {@const user = usersById[order.userId] || null}
     <div class="order fullw">
-      <OrderInfo order={order} services={services} />
+      <OrderInfo {order} {services} />
       <hr>
-      <div class="user">
-        <span class="user-prop">Имя:</span>
-        <span class="user-val">{user?.name || '---'}</span>
-        <span class="user-prop">Телефон:</span>
-        <span class="user-val">
-          {#if user?.phone}
-            <a class="phone-link" href="tel:{user?.phone}">
-              {user?.phone}
-            </a>
-          {:else}
-            ---          
-          {/if}
-        </span>
-      </div>
+      <UserInfo {user} />
       <div class="fullw controls">
         <button class="outline-btn controls-btn" on:click={() => dispatch('delete', order)}>Отменить</button>
         <button class="outline-btn controls-btn" on:click={goToWithState.NewOrder({order})}>Изменить</button>
@@ -70,21 +58,6 @@
 
   .controls-btn:last-child {
     border-right: 0;
-  }
-
-  .user {
-    padding: 8px 0;
-    margin: 8px;
-    display: grid;
-    column-gap: 8px;
-    row-gap: 4px;
-    grid-template-columns: min-content auto;
-    align-items: center;
-    justify-content: flex-start;
-  }
-  
-  .user-prop {
-    font-weight: 800;
   }
 
   .order {

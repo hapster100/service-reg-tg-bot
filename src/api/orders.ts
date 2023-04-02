@@ -47,6 +47,13 @@ export async function getOrders(year: number, month: number, day?: number) {
   return orders
 }
 
+export async function userOrders(userId: string) {
+  const res = await baseApiFetch('/orders/user/' + userId)
+  const json = await res.json()
+  const orders: Order[] = json?.orders.map(toOrder) || []
+  return orders
+}
+
 export async function myOrders() {
   const res = await baseApiFetch('/orders/user/' + userId)
   const json = await res.json()

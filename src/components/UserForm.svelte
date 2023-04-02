@@ -13,14 +13,14 @@
 
   let valid = false
 
-  $: valid = name.length > 0 && phone.replace(/\D/g, '').length === 11
+  $: valid = name.trim().length > 0 && phone.replace(/\D/g, '').length === 11
 
   function submit(e: Event) {
     e.preventDefault()
     const user = new User({
       id: userId,
-      phone: new Phone(phone.replace(/\D/g, '').slice(1)),
-      name
+      phone: phone.replace(/\D/g, '').slice(1),
+      name: name.trim()
     })
     dispatch('submit', user)
   }

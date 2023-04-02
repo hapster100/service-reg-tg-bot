@@ -13,6 +13,7 @@ export const Route = {
   Profile: '/profile',
   MasterInfo: '/masterinfo',
   CurrentDay: '/currentday',
+  ClientsList: '/clients'
 }
 
 

@@ -28,17 +28,37 @@ export class User {
   readonly isAdmin?: boolean
   
   constructor(raw: {
-    id: string
+    id: string,
     username?: string,
-    phone?: Phone,
+    phone?: string,
     name?: string,
     isAdmin?: boolean,
   }) {
     const {id, username, phone, name, isAdmin} = raw
     this.id = id
     if (username) this.username = username
-    if (phone) this.phone = phone
+    if (phone) this.phone = new Phone(phone)
     if (name) this.name = name
     if (isAdmin) this.isAdmin = isAdmin
+  }
+}
+
+export class ClientListUser extends User {
+  readonly lastOrder?: Date
+  readonly ordersCount?: number
+
+  constructor(raw: {
+    id: string,
+    username?: string,
+    phone?: string,
+    name?: string,
+    isAdmin?: boolean,
+    lastOrder?: string,
+    ordersCount?: number,
+  }) {
+    console.log(raw)
+    super(raw)
+    if (raw.lastOrder) this.lastOrder = new Date(raw.lastOrder) 
+    if (raw.ordersCount) this.ordersCount = Number(raw.ordersCount)
   }
 }

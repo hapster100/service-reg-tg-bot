@@ -25,7 +25,7 @@ export async function baseApiFetch(path: string, method = 'GET', body = {}, head
     'X-Master-Id': getMasterId(),
     ...headers,
   }
-  
+
   if (method !== 'GET') {
     options.body = JSON.stringify(body) 
   }

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { goTo } from "../stores/routes";
   import { isAdmin } from "../stores/user";
+  import ClientsList from "./ClientsList.svelte";
 </script>
 
 <div class="main-menu fullw">
@@ -13,6 +14,7 @@
     <button on:click={goTo.ServicesList}>Список услуг</button>
     <button on:click={goTo.Shedulle}>Расписание</button>
     <button on:click={goTo.MasterInfo}>Профиль мастера</button>
+    <button on:click={goTo.ClientsList}>Клиенты</button>
   {/if}
 </div>
 
