@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build --emptyOutDir",
+    "build-dev": "vite build --emptyOutDir --mode development",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json"
   },
