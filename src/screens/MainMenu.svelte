@@ -14,7 +14,7 @@
     <button on:click={goTo.ServicesList}>Список услуг</button>
     <button on:click={goTo.Shedulle}>Расписание</button>
     <button on:click={goTo.MasterInfo}>Профиль мастера</button>
-    <button on:click={goTo.ClientsList}>Клиенты</button>
+    <button on:click={goTo.ClientsList}>Клиентская база</button>
   {/if}
 </div>
 
