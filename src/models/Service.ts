@@ -5,6 +5,7 @@ export class Service {
   readonly imageUrl: string
   readonly cost: number
   readonly categoryId: string
+  readonly deleted: boolean
 
   constructor({
     id, 
@@ -13,12 +14,14 @@ export class Service {
     categoryId,
     imageUrl,
     cost,
+    deleted
   }) {
     this.categoryId = categoryId,
     this.id = id
     this.name = name
-    this.durationMinutes = durationMinutes,
-    this.imageUrl = imageUrl,
+    this.durationMinutes = durationMinutes
+    this.imageUrl = imageUrl
     this.cost = cost
+    this.deleted = deleted
   }
 }
